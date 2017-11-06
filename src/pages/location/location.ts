@@ -6,8 +6,8 @@ import { DataProvider } from '../../providers/data/data';
 
 @IonicPage()
 @Component({
-  selector: 'page-location',
-  templateUrl: 'location.html'
+    selector: 'page-location',
+    templateUrl: 'location.html'
 })
 
 export class LocationPage {
@@ -27,21 +27,29 @@ export class LocationPage {
     }
 
     ionViewDidLoad(): void {
-	let savedLocation: any = false;
 
-	this.maps.init(this.mapElement.nativeElement,
-		       this.pleaseConnect.nativeElement).then(() => {
+	this.dataService.getLocation().then((location) => {
 
-			   if(savedLocation){
-            
-			       this.latitude = savedLocation.latitude;
-			       this.longitude = savedLocation.longitude;
+            let savedLocation: any = false;
 
-			       this.maps.changeMarker(this.latitude,
-						      this.longitude);
-			   }
+            if(location && typeof(location) != "undefined"){
+		savedLocation = JSON.parse(location);
+            }
 
-		       }); 
+            let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
+
+		if(savedLocation){
+		    
+		    this.latitude = savedLocation.latitude;
+		    this.longitude = savedLocation.longitude;
+
+		    this.maps.changeMarker(this.latitude, this.longitude);
+
+		}
+
+            }); 
+
+	});
 
     }
 
@@ -59,7 +67,7 @@ export class LocationPage {
 		longitude: this.longitude
 	    };
 
-	    // this.dataService.setLocation(data);
+	    this.dataService.setLocation(data);
 
 	    let alert = this.alertCtrl.create({
 		title: 'Location set!',
