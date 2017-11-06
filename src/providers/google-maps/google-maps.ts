@@ -163,4 +163,13 @@ export class GoogleMapsProvider {
 	
     }
 
+    panToMarker(): void {
+
+
+	if(this.currentMarker){
+	    this.map.panTo(this.currentMarker.getPosition());
+	}
+
+	
+    }
 }

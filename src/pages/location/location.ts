@@ -99,4 +99,24 @@ export class LocationPage {
 	}
 
     }
+
+    reCenter(): void {
+	if(!this.latitude || !this.longitude){
+
+	    let alert = this.alertCtrl.create({
+		title: 'Nowhere to go!',
+		subTitle: 'You need to set your camp location first.',
+		buttons: ['Ok']
+	    });
+
+	    alert.present();
+	}
+	else {
+
+	    this.maps.panToMarker()
+
+
+	}
+
+    }
 }
