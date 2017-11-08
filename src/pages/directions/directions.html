@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      <img src = "assets/images/logo.png" class="logo" />
+    </ion-title>
+
+    <ion-buttons start>
+      <button ion-button icon-only (click)="setLocation()">
+	<ion-icon name="pin"></ion-icon>
+      </button>    
+    </ion-buttons>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="reCenter()">
+	<ion-icon name="walk"></ion-icon>
+      </button>  
+    </ion-buttons>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+        <ion-card-content>
+            <div #directionsPanel></div>
+        </ion-card-content>
+  </ion-card>
+
+  <div #map id="map"></div>
+
+     
+</ion-content>
