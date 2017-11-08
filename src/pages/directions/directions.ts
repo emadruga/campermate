@@ -1,5 +1,9 @@
 import { IonicPage, NavController } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
+import { DataProvider } from '../../providers/data/data';
+import { Geolocation } from '@ionic-native/geolocation';
+
 
 @IonicPage()
 @Component({
@@ -10,22 +14,65 @@ export class DirectionsPage {
  
     @ViewChild('map') mapElement: ElementRef;
     @ViewChild('directionsPanel') directionsPanel: ElementRef;
+    @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
+
     map: any;
+    latitude: number;
+    longitude: number;
  
-    constructor(public navCtrl: NavController) {
+    constructor(public navCtrl: NavController,
+		public dataService: DataProvider,
+		public geolocation: Geolocation,
+		public maps: GoogleMapsProvider) {
  
     }
  
     ionViewDidLoad(){
+ 	this.dataService.getLocation().then((location) => {
+
+            let savedLocation: any = false;
+
+            if(location && typeof(location) != "undefined"){
+		savedLocation = JSON.parse(location);
+            }
+
+            let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
+
+		if(savedLocation){
+		    
+		    this.latitude = savedLocation.latitude;
+		    this.longitude = savedLocation.longitude;
+
+
+		}
+
+            }); 
+
+	});
+
+
+        // this.loadMap();
  
-        this.loadMap();
-        this.startNavigating();
- 
+    }
+    
+    setLocation(): void {
+
+	this.geolocation.getCurrentPosition().then((position) => {
+
+	    this.latitude = position.coords.latitude;
+	    this.longitude = position.coords.longitude;
+
+	    this.maps.changeMarker(this.latitude, this.longitude);
+	    this.maps.startNavigating(this.maps, this.directionsPanel);
+
+
+	});
+	
     }
  
     loadMap(){
  
-        let rj = new google.maps.LatLng(-34.9290, 138.6010);
+        let rj = new google.maps.LatLng(43.0741904, -89.3809802);
  
         let mapOptions = {
           center: rj,
@@ -37,28 +84,5 @@ export class DirectionsPage {
  
     }
  
-    startNavigating(){
- 
-        let directionsService = new google.maps.DirectionsService;
-        let directionsDisplay = new google.maps.DirectionsRenderer;
- 
-        directionsDisplay.setMap(this.map);
-        directionsDisplay.setPanel(this.directionsPanel.nativeElement);
- 
-        directionsService.route({
-            origin: 'posto 2, copacabana',
-            destination: 'posto 10, ipanema',
-            travelMode: google.maps.TravelMode['DRIVING']
-        }, (res, status) => {
- 
-            if(status == google.maps.DirectionsStatus.OK){
-                directionsDisplay.setDirections(res);
-            } else {
-                console.warn(status);
-            }
- 
-        });
- 
-    }
  
 }

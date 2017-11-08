@@ -172,4 +172,29 @@ export class GoogleMapsProvider {
 
 	
     }
+
+    startNavigating(map, directionsPanel){
+ 
+        let directionsService = new google.maps.DirectionsService;
+        let directionsDisplay = new google.maps.DirectionsRenderer;
+ 
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(directionsPanel.nativeElement);
+ 
+        directionsService.route({
+            origin: 'posto 2, copacabana',
+            destination: 'posto 10, ipanema',
+            travelMode: google.maps.TravelMode['DRIVING']
+        }, (res, status) => {
+ 
+            if(status == google.maps.DirectionsStatus.OK){
+                directionsDisplay.setDirections(res);
+            } else {
+                console.warn(status);
+            }
+ 
+        });
+ 
+    }
+
 }
