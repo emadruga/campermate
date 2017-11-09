@@ -1,4 +1,4 @@
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { GoogleMapsProvider } from '../../providers/google-maps/google-maps';
 import { DataProvider } from '../../providers/data/data';
@@ -16,13 +16,13 @@ export class DirectionsPage {
     @ViewChild('directionsPanel') directionsPanel: ElementRef;
     @ViewChild('pleaseConnect') pleaseConnect: ElementRef;
 
-    map: any;
     latitude: number;
     longitude: number;
  
     constructor(public navCtrl: NavController,
 		public dataService: DataProvider,
 		public geolocation: Geolocation,
+		public alertCtrl: AlertController,
 		public maps: GoogleMapsProvider) {
  
     }
@@ -37,52 +37,43 @@ export class DirectionsPage {
             }
 
             let mapLoaded = this.maps.init(this.mapElement.nativeElement, this.pleaseConnect.nativeElement).then(() => {
-
+		console.log('map created!')
 		if(savedLocation){
-		    
 		    this.latitude = savedLocation.latitude;
 		    this.longitude = savedLocation.longitude;
-
-
 		}
 
             }); 
 
 	});
 
-
-        // this.loadMap();
- 
     }
     
     setLocation(): void {
 
-	this.geolocation.getCurrentPosition().then((position) => {
-
-	    this.latitude = position.coords.latitude;
-	    this.longitude = position.coords.longitude;
-
-	    this.maps.changeMarker(this.latitude, this.longitude);
-	    this.maps.startNavigating(this.maps, this.directionsPanel);
-
-
-	});
+	this.maps.startNavigating(this.directionsPanel);
 	
     }
- 
-    loadMap(){
- 
-        let rj = new google.maps.LatLng(43.0741904, -89.3809802);
- 
-        let mapOptions = {
-          center: rj,
-          zoom: 5,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
- 
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
- 
+
+    reCenter(): void {
+	if(!this.latitude || !this.longitude){
+
+	    let alert = this.alertCtrl.create({
+		title: 'Nowhere to go!',
+		subTitle: 'You need to set your camp location first.',
+		buttons: ['Ok']
+	    });
+
+	    alert.present();
+	}
+	else {
+
+	    this.maps.panToMarker()
+
+
+	}
+
     }
- 
- 
+
+
 }

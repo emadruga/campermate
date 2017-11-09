@@ -75,16 +75,19 @@ export class GoogleMapsProvider {
 
     initMap(): Promise<any> {
 	this.mapInitialised = true;
+	let rj = { lat  : -22.9068467,
+		   lng  : -43.1728965  };
 
 	return new Promise((resolve) => {
 
 	    this.geolocation.getCurrentPosition().then((position) => {
 
-		let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		// let latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+		let latLng = new google.maps.LatLng(rj.lat,rj.lng);
 
 		let mapOptions = {
 		    center: latLng,
-		    zoom: 15,
+		    zoom: 5,
 		    mapTypeId: google.maps.MapTypeId.ROADMAP
 		}
 
@@ -173,18 +176,18 @@ export class GoogleMapsProvider {
 	
     }
 
-    startNavigating(map, directionsPanel){
+    startNavigating(directionsPanel){
  
         let directionsService = new google.maps.DirectionsService;
         let directionsDisplay = new google.maps.DirectionsRenderer;
  
-        directionsDisplay.setMap(map);
+        directionsDisplay.setMap(this.map);
         directionsDisplay.setPanel(directionsPanel.nativeElement);
  
         directionsService.route({
             origin: 'posto 2, copacabana',
             destination: 'posto 10, ipanema',
-            travelMode: google.maps.TravelMode['DRIVING']
+            travelMode: google.maps.TravelMode['WALKING']
         }, (res, status) => {
  
             if(status == google.maps.DirectionsStatus.OK){

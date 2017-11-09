@@ -15,7 +15,6 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { HomePage } from '../pages/home/home';
 
-
 @NgModule({
     declarations: [
 	MyApp,

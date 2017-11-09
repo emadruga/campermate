@@ -99,11 +99,12 @@
         <variable name="XWALK_MULTIPLEAPK" value="true" />
     </plugin>
     <plugin name="cordova-plugin-wkwebview-engine" spec="https://github.com/driftyco/cordova-plugin-wkwebview-engine.git" />
-    <allow-navigation href="http://localhost:8080/*"/>
+    <allow-navigation href="http://localhost:8080/*" />
     <feature name="CDVWKWebViewEngine">
-      <param name="ios-package" value="CDVWKWebViewEngine" />
+        <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
-
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
-
+    <plugin name="cordova-plugin-nativegeocoder" spec="^2.0.4">
+        <variable name="LOCATION_WHEN_IN_USE_DESCRIPTION" value="Use geocoder service" />
+    </plugin>
 </widget>
